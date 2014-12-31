@@ -1,0 +1,151 @@
+.sp 1i
+
+.ps 24
+\fBThe SIGI Programming Language\fR
+.ps 16
+.sp
+Short introduction
+.sp 0.5
+.ps 14
+\fICopyright (c) David Hanefelt Kristensen\fR
+.ps 12
+.sp 0.3i
+This is a verbatim copy of the SIGI reference. The author hopes that this short (\fIalbeit concise\fR) reference manual will serve as a proper introduction to the capabilities of the SIGI Linear Programming Language.
+.sp
+
+.ps 14
+\fBIntroduction to SIGI\fR
+.ps 12
+.sp 0
+If you compare SIGI to other languages, you'll immediately see that there is, infact, a huge difference. SIGI does not resemble the major high-level programming languages (\fIC, C++, BASIC, PASCAL\fR) and does not try to provide a massive standard library to cloud its purpose. SIGI is a very small language, with no operation codes larger than 1 character. Instead, it prides on \fBelegant simplicity\fR. SIGI also seperates itself from other programming languages through the alternative way of handling memory as data, instead of actual, named variables or constants, making SIGI very portable.
+.sp
+
+.ps 14
+\fBSIGI concepts\fR
+.ps 12
+.sp 0
+ - Internal memory handling (no tight connection to the operating system)\n
+ - Linear memory array, in which, all code is operated\n
+ - No user-definable functions, SIGI programs depend on a small base of standard functions\n
+ - No named variables, only the memory array\n
+.sp
+
+.ps 14
+\fBSIGI Operation Codes\fR
+.ps 12
+.sp 0
+Operation codes, or \fIopcodes\fR, are the set of characters, SIGI maps its default functions on top of. The standard SIGI opcodes are: \n
+\n
+.ps 11
+\fBCharacter		Function\fR \n
+.sp 0
++			Add one to the current cell\n
+.sp 0
+-			Subtract one from the current cell
+.sp 0
+*			Add ten to the current cell
+.sp 0
+_			Subtract ten from the current cell
+.sp 0
+:			Add 100 to the current cell
+.sp 0
+;			Subtract 100 from the current cell
+.sp 0
+>			Go to the next cell
+.sp 0
+<			Go to the previous cell
+.sp 0
+p			Print the current cells ASCII value
+.sp 0
+c			Print the current cells integer value
+.sp 0
+a			Replace the value of the current cell with the one of the succeeding character
+.sp 0
+.			Get a single character from stdin and place it in the current cell
+.sp 0
+0			Reset the cells value to 0
+.sp 0
+.ps 12
+.sp
+In addition to the simple function opcodes, SIGI supplies a looping construct, that loops a given piece of code \fIn\fR number of times (\fIn being the value of the next cell\fR), which looks like:
+.sp 0.3
+\fC( opcodes )\fR
+.sp 0.3
+There is also a stream processing opcode, which processes input (through pipes) until end-of-file has been reached. Input is presented one character at a time. Syntax:
+.sp 0.3
+\fC{ opcodes }\fR
+.sp
+.ps 14
+\fBAn example SIGI program\fR
+.sp 0
+.ps 12
+This program prints out the whole ASCII table (both the integer ID and the actual character):
+.sp 0.3
+\fC
+>:***--<
+.sp 0
+n(+c>>a p0<<pn)n 
+.sp 7.9
+.ps 14
+\fBSIGI memory concepts\fR
+.sp 0
+.ps 12
+In SIGI, all data is stored in the linear memory array, with each element (\fIcalled a cell\fR) sized 4 bytes. In the default SIGI interpreter, there are 8192 cells of memory, effectively weighing in at 32 kB of RAM.
+.sp 0.5
+The SIGI parser starts out with all values at 0, and the current location at zero:
+.sp 0.3
+\fC
+Cell:	\fB0\fC	1	2	3	4
+.sp 0
+Value:	\fB0\fC	0	0	0	0\fR
+.sp 0.3
+Now, by typing in \fC*\fR in our SIGI file, the memory array suddenly looks like this:
+.sp 0.3
+\fC
+Cell:	\fB0\fC	1	2	3	4
+.sp 0
+Value:	\fB10\fC	0	0	0	0\fR
+.sp 0.3
+We can now go a couple of cells forward: \fC>>\fR will do just that. We will also want to set the value of the cell to 'S' (without the quotes). This is done with \fCaS\fR. The result is now:
+.sp 0.3
+Cell:		0	1	\fB2\fC	3	4
+.sp 0
+Value:	0	0	\fB83\fC	0	0\fR
+.sp 0.3
+By now, you'll probably be asking "\fIWait a minute, I thought we assigned the value S to the cell\fR". We actually didn't. What we assigned is the \fBASCII\fR value of the character S, which happens to be 83. All data in SIGI is represented as numbers. We can print out the number value of the current cell with the easy and convenient command \fCc\fR. But we can also print out the ASCII (character) value with the command \fCp\fR. It's all up to you.
+.sp 0.3
+\fITo view the whole ASCII table, run \fCsigi examples/ascii_table\fI in the SIGI source directory\fR
+.sp 2
+.ps 14
+\fBSIGI and personal cryptography\fR
+.sp 0.3
+.ps 12
+If you want an easy and convenient way of applying simple cryptography, you can write your own SIGI program, which you can distribute to your friends (along with the SIGI interpreter, of course). The simplest way of applying this (\fInot a very secure algorithm, mind you\fR) is writing something like:
+.sp 0.3
+\fC{*++p0}\fR
+.sp 0.3
+for the encoder part and 
+.sp 0.3
+\fC{_--p0}\fR
+.sp 0.3
+for the decoder part. You can subsequently send your decoding application to all your friends (\fIwith an unique addition/subtraction set of opcodes, rather than the default presented to you here\fR) and you'll be able to easily add atleast a bit to the default e-mail security.
+.sp 2
+.ps 14
+\fBThe SIGI interpreter\fR
+.sp 0.3
+.ps 12
+The SIGI interpreter is a rather special piece of work. Rather than being written using a specialized tool (lex/yacc), the SIGI interpreter is written in the ANSI C language. This allows for extreme portability and \fIeasy access to the memory\fR through the standard library routines.
+.sp 0.3
+The standard interpreter supplies: 
+.sp 0
+	\fI32 kilobytes of readily accessible memory (8092 pages)
+.sp 0
+	A portable, bug-free implementation of the SIGI programming language
+.sp 0
+	A particularily unrestrictive license (BSD 3-clause)
+\fR
+.sp 0.3
+If you intend to write a new SIGI interpreter, the reference code is a good place to start. Although not extensively commented, the code is readable enough for intermediately skilled C (\fIand hopefully C++\fR) programmers.
+.sp 1
+.ps 10
+The SIGI documentation and reference interpreter is written by David H. Kristensen and licensed under the BSD license. This document was typeset with \fBgroff\fR on an Apple iBook G4. The official SIGI project page is: http://project.departure.dk/sigi.html	

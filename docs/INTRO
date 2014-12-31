@@ -1,0 +1,65 @@
+TThhee SSIIGGII PPrrooggrraammmmiinngg LLaanngguuaaggee
+
+Short introduction
+_C_o_p_y_r_i_g_h_t _(_c_) _D_a_v_i_d _H_a_n_e_f_e_l_t _K_r_i_s_t_e_n_s_e_n
+
+
+Welcome  to  the  official  SIGI reference. The author hopes that
+this (albeit short) paper will serve as a proper introduction  to
+the capabilities of the SIGI Linear Programming Language.
+
+
+IInnttrroodduuccttiioonn ttoo SSIIGGII
+If  you  compare  SIGI to other languages, you'll immediately see
+that there is, infact, a huge difference. SIGI does not  resemble
+the  major  high-level programming languages (_C_, _C_+_+_, _B_A_S_I_C_, _P_A_S_-
+_C_A_L) and does not try to provide a massive  standard  library  to
+cloud  its purpose. SIGI is a very small language, with no opera-
+tion codes larger than 1 character. Instead, it  prides  on  SSiimm--
+pplliicciittyy oovveerr eelleeggaannccee. SIGI also seperates itself from other pro-
+gramming languages, due to its internal memory handling - it does
+not  work tightly with the OS to provide memory, and therefore it
+is highly portable over architectures (it does not  use  specific
+features of any platform)
+
+
+SSIIGGII ccoonncceeppttss
+ - Internal memory handling (no tight connection to the operating
+system)
+ - Linear memory array, in which, all code is operated
+ - No user-definable functions, SIGI programs depend on  a  small
+base of standard functions
+ - No named variables, only the memory array
+
+
+SSIIGGII OOppeerraattiioonn CCooddeess
+Operation codes, or _o_p_c_o_d_e_s, are the set of characters, SIGI maps
+its default functions on top of. The standard SIGI opcodes are:
+
+CChhaarraacctteerr               FFuunnccttiioonn
++                       Add one to the current cell
+-                       Subtract one from the current cell
+*                       Add ten to the current cell
+_                       Subtract ten from the current cell
+:                       Add 100 to the current cell
+;                       Subtract 100 from the current cell
+>                       Go to the next cell
+<                       Go to the previous cell
+p                       Print the current cells ASCII value
+c                       Print the current cells integer value
+a                       Replace the value  of  the  current  cell
+with the one of the succeeding character
+0                       Reset the cells value to 0
+
+In addition to the simple function opcodes, SIGI supplies a loop-
+ing construct, that loops a given piece of code _n number of times
+(_n _b_e_i_n_g _t_h_e _v_a_l_u_e _o_f _t_h_e _n_e_x_t _c_e_l_l), which looks like:
+( _o_p_c_o_d_e_s )
+ - eg, a set of paranthesises with opcodes inside.
+
+AAnn eexxaammppllee SSIIGGII pprrooggrraamm
+This  program  prints out the whole ASCII table (both the integer
+ID and the actual character):
+
+>:***--<
+n(+c>>a p0<<pn)n
